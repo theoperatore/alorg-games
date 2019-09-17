@@ -1,0 +1,21 @@
+[Unit]
+Description=Games inprogress, ondeck, beaten, and abandoned
+#Requires=After=mysql.service       # Requires the mysql service to run first
+
+[Service]
+ExecStart=/root/.yarn/bin/yarn start
+# Required on some systems
+WorkingDirectory=/root/games
+Restart=always
+# Restart service after 10 seconds if node service crashes
+RestartSec=10
+# Output to syslog
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=alorg-games
+#User=<alternate user>
+#Group=<alternate group>
+Environment=NODE_ENV=production PORT=3000 PATH=/root/.yarn/bin:/root/.config/yarn/global/node_modules/.bin:/root/.nvm/versions/node/v10.14.2/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+[Install]
+WantedBy=multi-user.target

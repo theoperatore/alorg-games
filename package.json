@@ -1,0 +1,40 @@
+{
+  "name": "games",
+  "version": "1.0.0",
+  "description": "A place to put games I've played, playing, or have stop playing",
+  "main": "index.js",
+  "author": "Al Petersen <theoperatore@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start",
+    "deploy": "yarn deploy:copy && yarn deploy:install",
+    "deploy:copy": "rsync -avzhP .next components lib pages .nvmrc next-env.d.ts package.json secrets.json tsconfig.json yarn.lock .deploy root@157.230.190.234:~/games",
+    "deploy:install": "ssh root@157.230.190.234 /root/games/.deploy/install.sh",
+    "remote": "ssh root@157.230.190.234"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  },
+  "dependencies": {
+    "firebase": "^6.6.1",
+    "isomorphic-unfetch": "^3.0.0",
+    "next": "^9.0.5",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0"
+  },
+  "devDependencies": {
+    "@types/node": "^12.7.5",
+    "@types/react": "^16.9.2",
+    "@types/react-dom": "^16.9.0",
+    "@types/styled-jsx": "^2.2.8",
+    "husky": "^3.0.5",
+    "prettier": "^1.18.2",
+    "pretty-quick": "^1.11.1",
+    "typescript": "^3.6.3"
+  }
+}

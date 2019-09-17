@@ -1,0 +1,4 @@
+.next
+node_modules
+secrets.json
+.DS_Store
