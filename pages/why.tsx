@@ -1,4 +1,5 @@
 import * as React from 'react';
+import Link from 'next/link';
 import { PageLayout } from '../components/PageLayout';
 
 export default function Why() {
@@ -32,7 +33,7 @@ export default function Why() {
               rel="noopener noreferrer"
               href="https://reactjs.org/"
             >
-              React
+              React for a framework
             </a>
           </li>
           <li>
@@ -41,7 +42,16 @@ export default function Why() {
               rel="noopener noreferrer"
               href="https://nextjs.org/"
             >
-              Next.js
+              Next.js as the server
+            </a>
+          </li>
+          <li>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://firebase.google.com/"
+            >
+              Firebase as my db
             </a>
           </li>
           <li>
@@ -63,6 +73,12 @@ export default function Why() {
             </a>
           </li>
         </ul>
+        <p>
+          And that's it!{' '}
+          <Link href="/">
+            <a>Back to games</a>
+          </Link>
+        </p>
       </section>
       <style jsx>
         {`
