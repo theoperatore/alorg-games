@@ -67,9 +67,9 @@ export default function Why() {
             <a
               target="_blank"
               rel="noopener noreferrer"
-              href="https://www.digitalocean.com/"
+              href="https://github.com/theoperatore/alorg-games"
             >
-              Github
+              Github where all the code is
             </a>
           </li>
         </ul>
