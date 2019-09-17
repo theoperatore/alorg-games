@@ -1,15 +1,25 @@
 import * as React from 'react';
 import { NextPage } from 'next';
 import Link from 'next/link';
-// import css from 'styled-jsx/css';
+import Router from 'next/router';
 import Head from 'next/head';
 import { PageLayout } from '../components/PageLayout';
 import { GameSearch } from '../components/GameSearch/ index';
 import { GiantBombSearchResult } from '../lib/giantbomb';
+import firebase from 'firebase/app';
+import { getDb } from '../lib/getDb';
 
-type Props = {};
+type Props = {
+  currentUser: null | firebase.User;
+};
 
 const Admin: NextPage<Props> = props => {
+  React.useEffect(() => {
+    if (!props.currentUser) {
+      Router.push('/login');
+    }
+  }, [props.currentUser]);
+
   const [game, setGame] = React.useState<null | GiantBombSearchResult>(null);
   const [selectedPlatform, setPlatform] = React.useState('');
   const [category, setCategory] = React.useState('inprogress');
@@ -196,9 +206,22 @@ const Admin: NextPage<Props> = props => {
   );
 };
 
-// Admin.getInitialProps = async ({ req }) => {
-//   const userAgent = req ? req.headers['user-agent'] || '' : navigator.userAgent;
-//   return { userAgent };
-// };
+Admin.getInitialProps = async () => {
+  const db = await getDb();
+  function getUser(): Promise<firebase.User | null> {
+    return new Promise(r => {
+      const off = db.app.auth().onAuthStateChanged(user => {
+        off();
+        r(user);
+      });
+    });
+  }
+
+  const user = await getUser();
+
+  return {
+    currentUser: user,
+  };
+};
 
 export default Admin;

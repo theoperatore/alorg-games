@@ -2,6 +2,7 @@ export async function getDb() {
   const config = await import('../secrets.json');
   const firebase = await import('firebase/app');
   await import('@firebase/firestore');
+  await import('@firebase/auth');
 
   try {
     firebase.initializeApp(config.firebase);
