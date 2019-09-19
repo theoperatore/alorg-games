@@ -85,10 +85,21 @@ const Index: NextPage<Props> = props => {
 
 Index.getInitialProps = async () => {
   const db = await getDb();
-  const inprogressRef = await db
-    .collection('inprogress')
-    .orderBy('date_added', 'desc')
-    .get();
+  const [inprogressRef, ondeckRef, beatenRef] = await Promise.all([
+    db
+      .collection('inprogress')
+      .orderBy('date_added', 'desc')
+      .get(),
+    db
+      .collection('ondeck')
+      .orderBy('date_added', 'desc')
+      .get(),
+    db
+      .collection('beaten')
+      .orderBy('date_added', 'desc')
+      .get(),
+  ]);
+
   const inprogress: GameType[] = inprogressRef.docs.map<GameType>(doc => ({
     id: doc.id,
     name: doc.get('name'),
@@ -97,10 +108,6 @@ Index.getInitialProps = async () => {
     gbid: doc.get('gbid'),
     image: doc.get('image'),
   }));
-  const ondeckRef = await db
-    .collection('ondeck')
-    .orderBy('date_added', 'desc')
-    .get();
   const ondeck: GameType[] = ondeckRef.docs.map<GameType>(doc => ({
     id: doc.id,
     name: doc.get('name'),
@@ -109,10 +116,6 @@ Index.getInitialProps = async () => {
     gbid: doc.get('gbid'),
     image: doc.get('image'),
   }));
-  const beatenRef = await db
-    .collection('beaten')
-    .orderBy('date_added', 'desc')
-    .get();
   const beaten: GameType[] = beatenRef.docs.map<GameType>(doc => ({
     id: doc.id,
     name: doc.get('name'),
