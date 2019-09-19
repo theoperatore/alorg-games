@@ -6,19 +6,18 @@ import Head from 'next/head';
 import { PageLayout } from '../components/PageLayout';
 import { GameSearch } from '../components/GameSearch/ index';
 import { GiantBombSearchResult } from '../lib/giantbomb';
-import firebase from 'firebase/app';
-import { getDb } from '../lib/getDb';
+import { useUser } from '../lib/useUser';
 
-type Props = {
-  currentUser: null | firebase.User;
-};
+const Admin: NextPage = () => {
+  const user = useUser();
 
-const Admin: NextPage<Props> = props => {
   React.useEffect(() => {
-    if (!props.currentUser) {
-      Router.push('/login');
+    if (!user.isLoading) {
+      if (!user.isLoggedIn) {
+        Router.push('/login');
+      }
     }
-  }, [props.currentUser]);
+  }, [user, user.isLoggedIn, user.isLoading]);
 
   const [game, setGame] = React.useState<null | GiantBombSearchResult>(null);
   const [selectedPlatform, setPlatform] = React.useState('');
@@ -68,6 +67,23 @@ const Admin: NextPage<Props> = props => {
         setTimeout(() => setSuccess(false), 2500);
       }
     });
+  }
+
+  if (user.isLoading) {
+    return (
+      <PageLayout>
+        <Head>
+          <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+            // integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+            // crossorigin="anonymous"
+          ></link>
+          <title>Admin</title>
+        </Head>
+        <p>verifying user...</p>
+      </PageLayout>
+    );
   }
 
   return (
@@ -204,24 +220,6 @@ const Admin: NextPage<Props> = props => {
       </div> */}
     </PageLayout>
   );
-};
-
-Admin.getInitialProps = async () => {
-  const db = await getDb();
-  function getUser(): Promise<firebase.User | null> {
-    return new Promise(r => {
-      const off = db.app.auth().onAuthStateChanged(user => {
-        off();
-        r(user);
-      });
-    });
-  }
-
-  const user = await getUser();
-
-  return {
-    currentUser: user,
-  };
 };
 
 export default Admin;
