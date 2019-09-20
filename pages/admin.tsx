@@ -7,6 +7,7 @@ import { PageLayout } from '../components/PageLayout';
 import { GameSearch } from '../components/GameSearch/ index';
 import { GiantBombSearchResult } from '../lib/giantbomb';
 import { useUser } from '../lib/useUser';
+import { Game } from '../components/Game';
 
 const Admin: NextPage = () => {
   const user = useUser();
@@ -115,7 +116,18 @@ const Admin: NextPage = () => {
             )}
             <div className="row">
               <div className="col">
-                <img src={game.image.original_url} className="img-thumbnail" />
+                <div style={{ width: '375px', margin: '0 auto' }}>
+                  <Game
+                    game={{
+                      image: game.image.original_url,
+                      comment,
+                      id: 'demo',
+                      gbid: `${game.id}`,
+                      name: game.name,
+                      platform: selectedPlatform,
+                    }}
+                  />
+                </div>
               </div>
               <div className="col">
                 <h3 className="mb-3">{game.name}</h3>

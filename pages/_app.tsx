@@ -8,6 +8,7 @@ export default class Application extends App {
     return (
       <>
         <Head>
+          <link rel="icon" type="image/png" href="/static/cd.png" />
           <title>Games</title>
         </Head>
         {/* put global context stuff here */}
