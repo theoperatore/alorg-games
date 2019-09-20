@@ -12,8 +12,7 @@ export default class Application extends App {
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <meta name="apple-mobile-web-app-title" content="AlorgGames"></meta>
           <meta name="apple-mobile-web-app-capable" content="yes"></meta>
-          <meta name="apple-mobile-web-app-capable" content="yes"></meta>
-          <meta name="theme-color" content="#000000" />
+          <meta name="theme-color" content="#ffffff" />
           <meta
             name="description"
             content="A place to put games I've played, playing, or have stop playing"
