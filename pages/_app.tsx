@@ -12,14 +12,15 @@ export default class Application extends App {
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <meta name="apple-mobile-web-app-title" content="AlorgGames"></meta>
           <meta name="apple-mobile-web-app-capable" content="yes"></meta>
+          <meta name="mobile-web-app-capable" content="yes" />
           <meta name="theme-color" content="#ffffff" />
           <meta
             name="description"
             content="A place to put games I've played, playing, or have stop playing"
           />
 
-          <link rel="manifest" href="static/manifest.json" />
-          <link rel="icon" type="image/png" href="static/cd.png" />
+          <link rel="manifest" href="/static/manifest.json" />
+          <link rel="icon" type="image/png" href="/static/cd.png" />
           <link rel="apple-touch-icon" href="/static/cd.png"></link>
           <title>Games</title>
         </Head>
