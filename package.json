@@ -11,7 +11,7 @@
     "build": "next build",
     "start": "next start",
     "deploy": "yarn deploy:copy && yarn deploy:install",
-    "deploy:copy": "rsync -avzhP .next components lib pages .nvmrc next-env.d.ts package.json secrets.json tsconfig.json yarn.lock .deploy root@157.230.190.234:~/games",
+    "deploy:copy": "rsync -avzhP .next components lib pages static .nvmrc next-env.d.ts package.json secrets.json tsconfig.json yarn.lock .deploy root@157.230.190.234:~/games",
     "deploy:install": "ssh root@157.230.190.234 /root/games/.deploy/install.sh",
     "remote": "ssh root@157.230.190.234"
   },
