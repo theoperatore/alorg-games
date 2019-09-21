@@ -21,7 +21,7 @@ export function Alert(props: Props) {
           left: 12px;
           right: 12px;
           transform: translateY(${show ? '12px' : '-100%'});
-          transition: transform 300ms ease;
+          transition: all 300ms ease;
           opacity: ${show ? 1 : 0};
         }
       `}</style>
