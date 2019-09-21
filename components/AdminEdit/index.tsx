@@ -88,11 +88,12 @@ export function AdminEdit(props: Props) {
       <Alert show={isSuccess} variant="success">
         Updated game
       </Alert>
-      <div className="mb-4">
+      <div className="section-container mb-4">
         <div className="mb-3">
           <h3 className="mb-3">Edit a game</h3>
         </div>
         <select
+          className="form-control"
           value={game ? game.id : '-'}
           onChange={e =>
             stageGame(games.find(g => g.id === e.target.value) || null)
@@ -220,6 +221,9 @@ export function AdminEdit(props: Props) {
       </div>
       <style jsx>
         {`
+          .section-container {
+            max-width: 500px;
+          }
           .game-preview-container {
             width: 375px;
           }

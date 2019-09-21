@@ -10,7 +10,7 @@ export function Alert(props: Props) {
   const { show, variant, children } = props;
   return (
     <>
-      <div className="alert-container shadow-lg rounded">
+      <div className={`alert-container ${show ? 'shadow-lg' : ''} rounded`}>
         <div className={`alert alert-${variant} mb-0`}>{children}</div>
       </div>
       <style jsx>{`
