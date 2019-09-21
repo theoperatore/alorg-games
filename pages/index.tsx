@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { getDb } from '../lib/getDb';
 import { Game } from '../components/Game';
 import { PageLayout } from '../components/PageLayout';
-import { useUser } from '../lib/useUser';
 import { AppHead } from '../components/Head';
 
 export type GameType = {
@@ -25,7 +24,6 @@ type Props = {
 
 const Index: NextPage<Props> = props => {
   const { inprogress, beaten, ondeck, setaside } = props;
-  const user = useUser();
   return (
     <>
       <AppHead title="Games" />
@@ -73,11 +71,9 @@ const Index: NextPage<Props> = props => {
           <Link href="/why">
             <a>wat dis?</a>
           </Link>{' '}
-          {user.isLoggedIn && (
-            <Link href="/admin">
-              <a>Admin</a>
-            </Link>
-          )}
+          <Link href="/admin">
+            <a className="admin-link">Admin</a>
+          </Link>
         </footer>
         <style jsx>{`
           .game-container {
@@ -91,6 +87,9 @@ const Index: NextPage<Props> = props => {
             min-width: 375px;
             margin-right: 8px;
             margin-bottom: 8px;
+          }
+          .admin-link {
+            color: white;
           }
 
           @media (max-width: 400px) {

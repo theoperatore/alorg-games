@@ -12,11 +12,14 @@ export function PageLayout(props: Props) {
         {`
           section {
             padding: 12px 24px;
+            padding-bottom: 48px;
           }
 
           @media (max-width: 400px) {
             section {
               padding: 12px;
+              padding-bottom: 48px;
+              margin-bottom: 48px;
             }
           }
         `}
