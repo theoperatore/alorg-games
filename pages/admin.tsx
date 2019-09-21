@@ -2,7 +2,6 @@ import * as React from 'react';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import Router from 'next/router';
-import Head from 'next/head';
 import { PageLayout } from '../components/PageLayout';
 import { GameSearch } from '../components/GameSearch/ index';
 import { GiantBombSearchResult } from '../lib/giantbomb';
@@ -116,113 +115,107 @@ const Admin: NextPage = () => {
               {showSuccess && (
                 <div className="alert alert-success">Saved game to db</div>
               )}
-              <div className="row">
-                <div className="col">
-                  <div style={{ width: '375px', margin: '0 auto' }}>
-                    <Game
-                      game={{
-                        image: game.image.original_url,
-                        comment,
-                        id: 'demo',
-                        gbid: `${game.id}`,
-                        name: game.name,
-                        platform: selectedPlatform,
-                      }}
-                    />
-                  </div>
+              <div className="game-preview-container">
+                <Game
+                  game={{
+                    image: game.image.original_url,
+                    comment,
+                    id: 'demo',
+                    gbid: `${game.id}`,
+                    name: game.name,
+                    platform: selectedPlatform,
+                  }}
+                />
+              </div>
+              <h3 className="mb-3">{game.name}</h3>
+              <div className="mb-3">
+                <h4 className="mb-1">Platforms</h4>
+                {!game.platforms && <div>No Platforms</div>}
+                {game.platforms &&
+                  game.platforms.map(platform => (
+                    <div key={platform.id} className="form-check">
+                      <input
+                        className="form-check-input"
+                        id={platform.name}
+                        type="radio"
+                        name="platform"
+                        value={platform.name}
+                        checked={selectedPlatform === platform.abbreviation}
+                        onChange={() => setPlatform(platform.abbreviation)}
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor={platform.name}
+                      >
+                        {platform.name}
+                      </label>
+                    </div>
+                  ))}
+              </div>
+              <div className="mb-3">
+                <h4 className="mb-1">Category</h4>
+                <div className="form-check">
+                  <input
+                    className="form-check-input"
+                    id="inprogress"
+                    type="radio"
+                    name="category"
+                    value="inprogress"
+                    checked={category === 'inprogress'}
+                    onChange={ev => setCategory(ev.target.value)}
+                  />
+                  <label className="form-check-label" htmlFor="inprogress">
+                    In progress
+                  </label>
                 </div>
-                <div className="col">
-                  <h3 className="mb-3">{game.name}</h3>
-                  <div className="mb-3">
-                    <h4 className="mb-1">Platforms</h4>
-                    {!game.platforms && <div>No Platforms</div>}
-                    {game.platforms &&
-                      game.platforms.map(platform => (
-                        <div key={platform.id} className="form-check">
-                          <input
-                            className="form-check-input"
-                            id={platform.name}
-                            type="radio"
-                            name="platform"
-                            value={platform.name}
-                            checked={selectedPlatform === platform.abbreviation}
-                            onChange={() => setPlatform(platform.abbreviation)}
-                          />
-                          <label
-                            className="form-check-label"
-                            htmlFor={platform.name}
-                          >
-                            {platform.name}
-                          </label>
-                        </div>
-                      ))}
-                  </div>
-                  <div className="mb-3">
-                    <h4 className="mb-1">Category</h4>
-                    <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        id="inprogress"
-                        type="radio"
-                        name="category"
-                        value="inprogress"
-                        checked={category === 'inprogress'}
-                        onChange={ev => setCategory(ev.target.value)}
-                      />
-                      <label className="form-check-label" htmlFor="inprogress">
-                        In progress
-                      </label>
-                    </div>
-                    <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        id="beaten"
-                        type="radio"
-                        name="category"
-                        value="beaten"
-                        checked={category === 'beaten'}
-                        onChange={ev => setCategory(ev.target.value)}
-                      />
-                      <label className="form-check-label" htmlFor="beaten">
-                        Beaten
-                      </label>
-                    </div>
-                    <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        id="ondeck"
-                        type="radio"
-                        name="category"
-                        value="ondeck"
-                        checked={category === 'ondeck'}
-                        onChange={ev => setCategory(ev.target.value)}
-                      />
-                      <label className="form-check-label" htmlFor="ondeck">
-                        On deck
-                      </label>
-                    </div>
-                  </div>
-                  <div className="mb-3">
-                    <h4 className="mb-1">Comment</h4>
-                    <textarea
-                      className="form-control"
-                      rows={3}
-                      placeholder="Comment on this game"
-                      value={comment}
-                      onChange={ev => setComment(ev.target.value)}
-                    ></textarea>
-                  </div>
-                  <div className="mb-3">
-                    <button
-                      disabled={isSaving}
-                      type="button"
-                      className="btn btn-success"
-                      onClick={handleAdd}
-                    >
-                      Add to collection
-                    </button>
-                  </div>
+                <div className="form-check">
+                  <input
+                    className="form-check-input"
+                    id="beaten"
+                    type="radio"
+                    name="category"
+                    value="beaten"
+                    checked={category === 'beaten'}
+                    onChange={ev => setCategory(ev.target.value)}
+                  />
+                  <label className="form-check-label" htmlFor="beaten">
+                    Beaten
+                  </label>
                 </div>
+                <div className="form-check">
+                  <input
+                    className="form-check-input"
+                    id="ondeck"
+                    type="radio"
+                    name="category"
+                    value="ondeck"
+                    checked={category === 'ondeck'}
+                    onChange={ev => setCategory(ev.target.value)}
+                  />
+                  <label className="form-check-label" htmlFor="ondeck">
+                    On deck
+                  </label>
+                </div>
+              </div>
+              <div className="mb-3">
+                <h4 className="mb-1">Comment</h4>
+                <textarea
+                  className="form-control"
+                  rows={3}
+                  placeholder="Comment on this game"
+                  value={comment}
+                  onChange={ev => setComment(ev.target.value)}
+                ></textarea>
+              </div>
+              <div className="mb-3">
+                <button
+                  disabled={isSaving}
+                  type="button"
+                  className="btn btn-success"
+                  onClick={handleAdd}
+                >
+                  Add to collection
+                </button>
               </div>
             </div>
           )}
@@ -232,6 +225,18 @@ const Admin: NextPage = () => {
           <h3 className="mb-3">Move a game</h3>
         </div>
       </div> */}
+        <style jsx>
+          {`
+            .game-preview-container {
+              width: 375px;
+            }
+            @media (max-width: 400px) {
+              .game-preview-container {
+                width: 100%;
+              }
+            }
+          `}
+        </style>
       </PageLayout>
     </>
   );

@@ -7,6 +7,7 @@ type Props = {
 };
 
 export function GameSearch(props: Props) {
+  const [isLoading, setLoading] = React.useState(false);
   const [show, setShow] = React.useState(false);
   const [search, setSearch] = React.useState('');
   const dSearch = useDebounce(search, 300);
@@ -38,11 +39,13 @@ export function GameSearch(props: Props) {
 
     if (dSearch) {
       const term = encodeURIComponent(dSearch);
+      setLoading(true);
       fetch(`/api/search?q=${term}`)
         .then(response => response.json())
         .then((obj: { results: GiantBombSearchResult[] }) => {
           if (isValid) {
             setShow(true);
+            setLoading(false);
             setResults(obj.results);
           }
         });
@@ -51,7 +54,7 @@ export function GameSearch(props: Props) {
     return () => {
       isValid = false;
     };
-  }, [dSearch]);
+  }, [dSearch, setLoading]);
 
   function handleSelect(item: GiantBombSearchResult) {
     setShow(false);
@@ -71,21 +74,32 @@ export function GameSearch(props: Props) {
       />
       {show && (
         <div ref={ref} className="results shadow mb-5 bg-white rounded">
-          {results.map(result => (
-            <div
-              key={result.id}
-              className="result-item p-3"
-              onClick={() => handleSelect(result)}
-            >
-              <p style={{ fontWeight: 'bold' }}>{result.name}</p>
-              {!result.platforms && <small className="text-muted">N/A</small>}
-              {result.platforms && (
-                <small className="text-muted">
-                  {result.platforms.map(p => p.name).join(', ')}
-                </small>
-              )}
+          {isLoading && (
+            <div className="result-item p-3">
+              <p className="text-muted">...</p>
             </div>
-          ))}
+          )}
+          {!isLoading && dSearch && results.length === 0 && (
+            <div className="result-item p-3">
+              <p className="text-muted">No results</p>
+            </div>
+          )}
+          {!isLoading &&
+            results.map(result => (
+              <div
+                key={result.id}
+                className="result-item p-3"
+                onClick={() => handleSelect(result)}
+              >
+                <p style={{ fontWeight: 'bold' }}>{result.name}</p>
+                {!result.platforms && <small className="text-muted">N/A</small>}
+                {result.platforms && (
+                  <small className="text-muted">
+                    {result.platforms.map(p => p.name).join(', ')}
+                  </small>
+                )}
+              </div>
+            ))}
         </div>
       )}
       <style jsx>{`
