@@ -8,6 +8,7 @@ import { GiantBombSearchResult } from '../lib/giantbomb';
 import { useUser } from '../lib/useUser';
 import { Game } from '../components/Game';
 import { AppHead } from '../components/Head';
+import { Alert } from '../components/Alert';
 
 const Admin: NextPage = () => {
   const user = useUser();
@@ -112,9 +113,9 @@ const Admin: NextPage = () => {
           </div>
           {game && (
             <div className="">
-              {showSuccess && (
-                <div className="alert alert-success">Saved game to db</div>
-              )}
+              <Alert show={showSuccess} variant="success">
+                <strong>Saved game to db</strong>
+              </Alert>
               <div className="game-preview-container">
                 <Game
                   game={{
@@ -221,10 +222,10 @@ const Admin: NextPage = () => {
           )}
         </div>
         {/* <div className="mb-4">
-        <div className="mb-3">
-          <h3 className="mb-3">Move a game</h3>
-        </div>
-      </div> */}
+          <div className="mb-3">
+            <h3 className="mb-3">Move a game</h3>
+          </div>
+        </div> */}
         <style jsx>
           {`
             .game-preview-container {
