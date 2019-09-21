@@ -109,20 +109,24 @@ Index.getInitialProps = async () => {
   const db = await getDb();
   const [inprogressRef, ondeckRef, beatenRef, setasideRef] = await Promise.all([
     db
-      .collection('inprogress')
-      .orderBy('date_added', 'desc')
+      .collection('games')
+      .where('category', '==', 'inprogress')
+      .orderBy('date_modified', 'desc')
       .get(),
     db
-      .collection('ondeck')
-      .orderBy('date_added', 'desc')
+      .collection('games')
+      .where('category', '==', 'ondeck')
+      .orderBy('date_modified', 'desc')
       .get(),
     db
-      .collection('beaten')
-      .orderBy('date_added', 'desc')
+      .collection('games')
+      .where('category', '==', 'beaten')
+      .orderBy('date_modified', 'desc')
       .get(),
     db
-      .collection('setaside')
-      .orderBy('date_added', 'desc')
+      .collection('games')
+      .where('category', '==', 'setaside')
+      .orderBy('date_modified', 'desc')
       .get(),
   ]);
 
