@@ -8,6 +8,7 @@ import { GameSearch } from '../components/GameSearch/ index';
 import { GiantBombSearchResult } from '../lib/giantbomb';
 import { useUser } from '../lib/useUser';
 import { Game } from '../components/Game';
+import { AppHead } from '../components/Head';
 
 const Admin: NextPage = () => {
   const user = useUser();
@@ -73,15 +74,14 @@ const Admin: NextPage = () => {
   if (user.isLoading) {
     return (
       <PageLayout>
-        <Head>
+        <AppHead title="Admin">
           <link
             rel="stylesheet"
             href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-            // integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-            // crossorigin="anonymous"
+            integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+            crossOrigin="anonymous"
           ></link>
-          <title>Admin</title>
-        </Head>
+        </AppHead>
         <p>verifying user...</p>
       </PageLayout>
     );
@@ -89,15 +89,14 @@ const Admin: NextPage = () => {
 
   return (
     <PageLayout>
-      <Head>
+      <AppHead title="Admin">
         <link
           rel="stylesheet"
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          // integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-          // crossorigin="anonymous"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossOrigin="anonymous"
         ></link>
-        <title>Admin</title>
-      </Head>
+      </AppHead>
       <div className="mb-4">
         <h1>Admin the db</h1>
         <Link href="/">

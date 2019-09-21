@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { PageLayout } from '../components/PageLayout';
 import Router from 'next/router';
+import { AppHead } from '../components/Head';
 
 export default function Login() {
   const [email, setEmail] = React.useState('');
@@ -26,28 +27,31 @@ export default function Login() {
   }
 
   return (
-    <PageLayout>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <input
-            placeholder="email"
-            value={email}
-            onChange={ev => setEmail(ev.target.value)}
-            type="email"
-          />
-        </div>
-        <div>
-          <input
-            placeholder="password"
-            value={password}
-            onChange={ev => setPassword(ev.target.value)}
-            type="password"
-          />
-        </div>
-        <button type="submit" disabled={isLoading}>
-          Log in
-        </button>
-      </form>
-    </PageLayout>
+    <>
+      <AppHead title="Login" />
+      <PageLayout>
+        <form onSubmit={handleSubmit}>
+          <div>
+            <input
+              placeholder="email"
+              value={email}
+              onChange={ev => setEmail(ev.target.value)}
+              type="email"
+            />
+          </div>
+          <div>
+            <input
+              placeholder="password"
+              value={password}
+              onChange={ev => setPassword(ev.target.value)}
+              type="password"
+            />
+          </div>
+          <button type="submit" disabled={isLoading}>
+            Log in
+          </button>
+        </form>
+      </PageLayout>
+    </>
   );
 }

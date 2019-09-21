@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { getDb } from '../lib/getDb';
 import { Game } from '../components/Game';
 import { PageLayout } from '../components/PageLayout';
+import { useUser } from '../lib/useUser';
+import { AppHead } from '../components/Head';
 
 export type GameType = {
   id: string;
@@ -18,74 +20,96 @@ type Props = {
   inprogress: GameType[];
   beaten: GameType[];
   ondeck: GameType[];
+  setaside: GameType[];
 };
 
 const Index: NextPage<Props> = props => {
-  const { inprogress, beaten, ondeck } = props;
+  const { inprogress, beaten, ondeck, setaside } = props;
+  const user = useUser();
   return (
-    <PageLayout>
-      <h1>In progress</h1>
-      <small>Little by little.</small>
-      <div className="game-container">
-        {inprogress.map(game => (
-          <div key={game.id} className="container">
-            <Game game={game} />
+    <>
+      <AppHead title="Games">
+        <PageLayout>
+          <h1>In progress</h1>
+          <small>Little by little.</small>
+          <div className="game-container">
+            {inprogress.map(game => (
+              <div key={game.id} className="container">
+                <Game game={game} />
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      <h1>Beaten</h1>
-      <small>Sometimes for story, somtimes for glory.</small>
-      <div className="game-container">
-        {beaten.map(game => (
-          <div key={game.id} className="container">
-            <Game game={game} />
+          <h1>On deck</h1>
+          <small>A few games to keep an eye on.</small>
+          <div className="game-container">
+            {ondeck.map(game => (
+              <div key={game.id} className="container">
+                <Game game={game} />
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      <h1>On deck</h1>
-      <small>A few games to keep an eye on.</small>
-      <div className="game-container">
-        {ondeck.map(game => (
-          <div key={game.id} className="container">
-            <Game game={game} />
+          <h1>Beaten</h1>
+          <small>Sometimes for story, somtimes for glory.</small>
+          <div className="game-container">
+            {beaten.map(game => (
+              <div key={game.id} className="container">
+                <Game game={game} />
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      <footer>
-        @2019{' '}
-        <Link href="/why">
-          <a>wat dis?</a>
-        </Link>
-      </footer>
-      <style jsx>{`
-        .game-container {
-          display: flex;
-          flex-direction: row;
-          flex-wrap: wrap;
-          padding: 8px 0;
-        }
-        .container {
-          width: 375px;
-          min-width: 375px;
-          margin-right: 8px;
-          margin-bottom: 8px;
-        }
+          <h1>Set aside</h1>
+          <small>
+            Either just not for me or something else took my attention away.
+          </small>
+          <div className="game-container">
+            {setaside.map(game => (
+              <div key={game.id} className="container">
+                <Game game={game} />
+              </div>
+            ))}
+          </div>
+          <footer>
+            @2019{' '}
+            <Link href="/why">
+              <a>wat dis?</a>
+            </Link>{' '}
+            {user.isLoggedIn && (
+              <Link href="/admin">
+                <a>Admin</a>
+              </Link>
+            )}
+          </footer>
+          <style jsx>{`
+            .game-container {
+              display: flex;
+              flex-direction: row;
+              flex-wrap: wrap;
+              padding: 8px 0;
+            }
+            .container {
+              width: 375px;
+              min-width: 375px;
+              margin-right: 8px;
+              margin-bottom: 8px;
+            }
 
-        @media (max-width: 400px) {
-          .container {
-            width: 100%;
-            min-width: 0;
-            margin-right: 0;
-          }
-        }
-      `}</style>
-    </PageLayout>
+            @media (max-width: 400px) {
+              .container {
+                width: 100%;
+                min-width: 0;
+                margin-right: 0;
+              }
+            }
+          `}</style>
+        </PageLayout>
+      </AppHead>
+    </>
   );
 };
 
 Index.getInitialProps = async () => {
   const db = await getDb();
-  const [inprogressRef, ondeckRef, beatenRef] = await Promise.all([
+  const [inprogressRef, ondeckRef, beatenRef, setasideRef] = await Promise.all([
     db
       .collection('inprogress')
       .orderBy('date_added', 'desc')
@@ -96,6 +120,10 @@ Index.getInitialProps = async () => {
       .get(),
     db
       .collection('beaten')
+      .orderBy('date_added', 'desc')
+      .get(),
+    db
+      .collection('setaside')
       .orderBy('date_added', 'desc')
       .get(),
   ]);
@@ -124,10 +152,19 @@ Index.getInitialProps = async () => {
     gbid: doc.get('gbid'),
     image: doc.get('image'),
   }));
+  const setaside: GameType[] = setasideRef.docs.map<GameType>(doc => ({
+    id: doc.id,
+    name: doc.get('name'),
+    platform: doc.get('platform'),
+    comment: doc.get('comment'),
+    gbid: doc.get('gbid'),
+    image: doc.get('image'),
+  }));
   return {
     inprogress,
     beaten,
     ondeck,
+    setaside,
   };
 };
 
