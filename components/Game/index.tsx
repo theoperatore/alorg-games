@@ -1,5 +1,35 @@
 import * as React from 'react';
+import styled from 'styled-components';
 import { GameType } from '../../pages';
+
+const Container = styled.div<{ image: string }>`
+  height: 450px;
+  width: 100%;
+  border-radius: 12px;
+  color: #fff;
+
+  padding: 12px;
+  display: flex;
+  align-items: flex-end;
+
+  background-image: url(${props => props.image});
+  background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.9)),
+    url(${props => props.image});
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+`;
+
+const Platform = styled.small`
+  color: #d9d9d9;
+  padding: 0;
+  margin: 0;
+`;
+
+const Name = styled.h2`
+  padding: 0;
+  margin: 0;
+`;
 
 type Props = {
   game: GameType;
@@ -7,47 +37,14 @@ type Props = {
 
 export function Game({ game }: Props) {
   return (
-    <div className="container">
-      <div className="game">
-        <div className="title">
-          <small className="platform">{game.platform}</small>
-          <h2 className="name">{game.name}</h2>
+    <Container image={game.image}>
+      <div>
+        <div>
+          <Platform>{game.platform}</Platform>
+          <Name>{game.name}</Name>
         </div>
         <p>{game.comment}</p>
       </div>
-      <div></div>
-      <style jsx>{`
-        .container {
-          height: 450px;
-          width: 100%;
-          border-radius: 12px;
-          color: #fff;
-
-          padding: 12px;
-          display: flex;
-          align-items: flex-end;
-
-          background-image: url(${game.image});
-          background-image: linear-gradient(
-              rgba(0, 0, 0, 0.1),
-              rgba(0, 0, 0, 0.9)
-            ),
-            url(${game.image});
-          background-repeat: no-repeat;
-          background-size: cover;
-          background-position: center;
-        }
-
-        .name,
-        .platform {
-          padding: 0;
-          margin: 0;
-        }
-
-        .platform {
-          color: #d9d9d9;
-        }
-      `}</style>
-    </div>
+    </Container>
   );
 }

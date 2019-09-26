@@ -1,14 +1,8 @@
 import * as React from 'react';
+import { createGlobalStyle } from 'styled-components';
 import App from 'next/app';
 
-export default class Application extends App {
-  render() {
-    const { Component, pageProps } = this.props;
-    return (
-      <>
-        {/* put global context stuff here */}
-        <Component {...pageProps} />
-        <style jsx global>{`
+const Reset = createGlobalStyle`
           *,
           *::before,
           *::after {
@@ -309,27 +303,15 @@ export default class Application extends App {
             display: block;
           }
 
-          /* Suppress the ugly broken image styling in Firefox */
-          @-moz-document url-prefix() {
-            img {
-              font-size: 0;
-            }
-            img:-moz-broken {
-              font-size: inherit;
-            }
-          }
+`;
 
-          .assistive {
-            border: 0 !important;
-            clip: rect(1px, 1px, 1px, 1px) !important;
-            height: 1px !important;
-            overflow: hidden !important;
-            padding: 0 !important;
-            position: absolute !important;
-            width: 1px !important;
-            white-space: nowrap !important;
-          }
-        `}</style>
+export default class Application extends App {
+  render() {
+    const { Component, pageProps } = this.props;
+    return (
+      <>
+        <Reset />
+        <Component {...pageProps} />
       </>
     );
   }
