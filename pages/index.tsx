@@ -30,9 +30,6 @@ const Index: NextPage<Props> = props => {
       <PageLayout>
         <h1>In progress</h1>
         <small>Little by little.</small>
-        <Link href="/admin">
-          <a className="admin-link">Admin</a>
-        </Link>
         <div className="game-container">
           {inprogress.map(game => (
             <div key={game.id} className="container">
