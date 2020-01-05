@@ -18,6 +18,13 @@ const Container = styled.div<{ image: string }>`
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+
+  transition: transform 300ms ease;
+
+  &:hover,
+  &:active {
+    transform: scale(0.97);
+  }
 `;
 
 const Platform = styled.small`
