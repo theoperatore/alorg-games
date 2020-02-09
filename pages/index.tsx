@@ -1,29 +1,17 @@
 import * as React from 'react';
-import { NextPage } from 'next';
+import { AppHead } from '../components/Head';
 import Link from 'next/link';
-import { getDb } from '../lib/getDb';
 import { Game } from '../components/Game';
 import { PageLayout } from '../components/PageLayout';
-import { AppHead } from '../components/Head';
+import { useGames } from '../lib/useGames';
 
-export type GameType = {
-  id: string;
-  name: string;
-  platform: string;
-  comment?: string;
-  image: string;
-  gbid: string;
-};
+const Index = () => {
+  const games = useGames();
 
-type Props = {
-  inprogress: GameType[];
-  beaten: GameType[];
-  ondeck: GameType[];
-  setaside: GameType[];
-};
+  // maybe we should do some neat loading things.
+  if (!games) return null;
 
-const Index: NextPage<Props> = props => {
-  const { inprogress, beaten, ondeck, setaside } = props;
+  const { inprogress, beaten, ondeck, setaside } = games;
   return (
     <>
       <AppHead title="Games" />
@@ -103,71 +91,6 @@ const Index: NextPage<Props> = props => {
       </PageLayout>
     </>
   );
-};
-
-Index.getInitialProps = async () => {
-  const db = await getDb();
-  const [inprogressRef, ondeckRef, beatenRef, setasideRef] = await Promise.all([
-    db
-      .collection('games')
-      .where('category', '==', 'inprogress')
-      .orderBy('date_modified', 'desc')
-      .get(),
-    db
-      .collection('games')
-      .where('category', '==', 'ondeck')
-      .orderBy('date_modified', 'desc')
-      .get(),
-    db
-      .collection('games')
-      .where('category', '==', 'beaten')
-      .orderBy('date_modified', 'desc')
-      .get(),
-    db
-      .collection('games')
-      .where('category', '==', 'setaside')
-      .orderBy('date_modified', 'desc')
-      .get(),
-  ]);
-
-  const inprogress: GameType[] = inprogressRef.docs.map<GameType>(doc => ({
-    id: doc.id,
-    name: doc.get('name'),
-    platform: doc.get('platform'),
-    comment: doc.get('comment'),
-    gbid: doc.get('gbid'),
-    image: doc.get('image'),
-  }));
-  const ondeck: GameType[] = ondeckRef.docs.map<GameType>(doc => ({
-    id: doc.id,
-    name: doc.get('name'),
-    platform: doc.get('platform'),
-    comment: doc.get('comment'),
-    gbid: doc.get('gbid'),
-    image: doc.get('image'),
-  }));
-  const beaten: GameType[] = beatenRef.docs.map<GameType>(doc => ({
-    id: doc.id,
-    name: doc.get('name'),
-    platform: doc.get('platform'),
-    comment: doc.get('comment'),
-    gbid: doc.get('gbid'),
-    image: doc.get('image'),
-  }));
-  const setaside: GameType[] = setasideRef.docs.map<GameType>(doc => ({
-    id: doc.id,
-    name: doc.get('name'),
-    platform: doc.get('platform'),
-    comment: doc.get('comment'),
-    gbid: doc.get('gbid'),
-    image: doc.get('image'),
-  }));
-  return {
-    inprogress,
-    beaten,
-    ondeck,
-    setaside,
-  };
 };
 
 export default Index;

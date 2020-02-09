@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { GameType } from '../../pages';
+import { GameType } from '../../lib/useGames';
 
 const Container = styled.div<{ image: string }>`
   height: 450px;

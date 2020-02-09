@@ -4,7 +4,7 @@ import { getDb } from '../../lib/getDb';
 
 export default async function games(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
-    const db = await getDb();
+    const [db] = await getDb();
     const games = await db.collection('games').get();
     const data = games.docs.map(doc => ({ ...doc.data(), id: doc.id }));
     res.json(data);
@@ -12,7 +12,7 @@ export default async function games(req: NextApiRequest, res: NextApiResponse) {
   }
 
   if (req.method === 'POST') {
-    const db = await getDb();
+    const [db] = await getDb();
     const { game, category } = JSON.parse(req.body);
     const timestamp = firebase.firestore.Timestamp.now();
     try {
@@ -31,7 +31,7 @@ export default async function games(req: NextApiRequest, res: NextApiResponse) {
   }
 
   if (req.method === 'PUT') {
-    const db = await getDb();
+    const [db] = await getDb();
     const { game, id } = JSON.parse(req.body);
     const timestamp = firebase.firestore.Timestamp.now();
     try {

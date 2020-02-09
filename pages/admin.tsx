@@ -1,25 +1,21 @@
 import * as React from 'react';
 import { NextPage } from 'next';
 import Link from 'next/link';
-import Router from 'next/router';
 import { PageLayout } from '../components/PageLayout';
 import { useUser } from '../lib/useUser';
 import { AppHead } from '../components/Head';
 import { AdminAdd } from '../components/AdminAdd';
 import { AdminEdit } from '../components/AdminEdit';
+import { Redirect } from '../components/Redirect';
 
 const Admin: NextPage = () => {
   const user = useUser();
 
-  React.useEffect(() => {
-    if (!user.isLoading) {
-      if (!user.isLoggedIn) {
-        Router.push('/login');
-      }
-    }
-  }, [user, user.isLoggedIn, user.isLoading]);
+  if (user === 'failed') {
+    return <Redirect to="/login" />;
+  }
 
-  if (user.isLoading) {
+  if (user === 'pending') {
     return (
       <>
         <AppHead title="Admin">

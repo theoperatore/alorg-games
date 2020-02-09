@@ -12,7 +12,7 @@ export default async function login(req: NextApiRequest, res: NextApiResponse) {
   const { email, password } = body;
   if (!email || !password) return res.status(400).end();
 
-  const db = await getDb();
+  const [db] = await getDb();
   try {
     const creds = await db.app
       .auth()
@@ -25,6 +25,6 @@ export default async function login(req: NextApiRequest, res: NextApiResponse) {
     return res.status(403).end();
   } catch (error) {
     console.error(error);
-    return res.status(401).end();
+    return res.status(401).json({ error: error.message });
   }
 }

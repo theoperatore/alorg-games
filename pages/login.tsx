@@ -2,29 +2,41 @@ import * as React from 'react';
 import { PageLayout } from '../components/PageLayout';
 import Router from 'next/router';
 import { AppHead } from '../components/Head';
+import { useUser } from '../lib/useUser';
+import { useFirebase } from '../lib/getDb';
 
 export default function Login() {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [isLoading, setLoading] = React.useState(false);
+  const firebase = useFirebase();
+  const user = useUser();
 
   async function handleSubmit(ev: React.FormEvent) {
     ev.preventDefault();
     ev.stopPropagation();
     setLoading(true);
-    const response = await fetch('/api/login', {
-      method: 'POST',
-      body: JSON.stringify({ email, password }),
-    });
-    if (response.ok) {
-      // perhaps it's better to have an authStateChanged
-      // on the server before sending the 200 OK?
-      Router.push('/admin');
-    } else {
+    try {
+      await firebase.auth().signInWithEmailAndPassword(email, password);
+    } catch (error) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      if (errorCode === 'auth/wrong-password') {
+        alert('Wrong password.');
+      } else {
+        alert(errorMessage);
+      }
+      console.log(error);
       setLoading(false);
-      console.log('error logging in', response.status);
     }
   }
+
+  React.useEffect(() => {
+    if (user === 'success') {
+      alert('Success! Redirecting to admin');
+      Router.push('/admin');
+    }
+  }, [user]);
 
   return (
     <>
