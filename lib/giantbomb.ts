@@ -50,8 +50,7 @@ type GiantBombSearch = {
 };
 
 export async function searchGame(query: string) {
-  const secrets = await import('../secrets.json');
-  const url = `https://www.giantbomb.com/api/search/?api_key=${secrets.giantbomb.apiKey}&format=json&limit=500&resources=game&field_list=id,image,name,platforms,original_release_date,expected_release_day,expected_release_month,expected_release_year&query=${query}`;
+  const url = `https://www.giantbomb.com/api/search/?api_key=${process.env.GB_TOKEN}&format=json&limit=500&resources=game&field_list=id,image,name,platforms,original_release_date,expected_release_day,expected_release_month,expected_release_year&query=${query}`;
   const response = await fetch(url);
   const payload = (await response.json()) as GiantBombSearch;
   return payload.results;
