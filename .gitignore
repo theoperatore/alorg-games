@@ -4,3 +4,5 @@ secrets.json
 .DS_Store
 .password
 .env
+
+.now

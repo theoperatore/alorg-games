@@ -18,7 +18,7 @@ export type GamesList = {
   setaside: GameType[];
 };
 
-const LoadGames = new Dataloader<any, GamesList>(
+export const LoadGames = new Dataloader<any, GamesList>(
   async () => {
     const [db] = await getDb();
     const [

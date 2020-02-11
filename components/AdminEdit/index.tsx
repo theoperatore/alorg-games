@@ -1,6 +1,9 @@
 import * as React from 'react';
-import { Game } from '../Game';
+import { Game as GameComponent } from '../Game';
 import { Alert } from '../Alert';
+import { useGamesList, Game } from '../../lib/useGamesList';
+import { useGamePut } from '../../lib/useGamePut';
+import { LoadGames } from '../../lib/useGames';
 
 type EditGame = {
   id: string;
@@ -12,38 +15,18 @@ type EditGame = {
   image: string;
 };
 
-type Props = {};
-
-export function AdminEdit(props: Props) {
+export function AdminEdit() {
   const [cache, setCache] = React.useState(1);
-  const [games, setGames] = React.useState<EditGame[]>([]);
-  const [isLoading, setLoading] = React.useState(false);
+  const games = useGamesList(cache);
   const [isSaving, setSaving] = React.useState(false);
   const [isSuccess, setSuccess] = React.useState(false);
-  const [game, setGame] = React.useState<null | EditGame>(null);
+  const [game, setGame] = React.useState<null | Game>(null);
   const [name, setName] = React.useState('');
   const [category, setCategory] = React.useState('');
   const [comment, setComment] = React.useState('');
+  const putGame = useGamePut();
 
-  React.useEffect(() => {
-    let isActive = true;
-
-    setLoading(true);
-    fetch('/api/games')
-      .then(r => r.json())
-      .then(data => {
-        if (isActive) {
-          setLoading(false);
-          setGames(data);
-        }
-      });
-
-    return () => {
-      isActive = false;
-    };
-  }, [cache]);
-
-  function stageGame(game: EditGame | null) {
+  function stageGame(game: Game | null) {
     if (!game) {
       setGame(null);
       return;
@@ -59,28 +42,23 @@ export function AdminEdit(props: Props) {
     setCache(c => c + 1);
   }
 
-  function handleAdd() {
+  async function handleAdd() {
     if (!game) return;
 
-    const payload = {
-      game: {
-        category,
-        comment,
-      },
-      id: game.id,
-    };
-
     setSaving(true);
-    fetch('/api/games', { method: 'PUT', body: JSON.stringify(payload) }).then(
-      response => {
-        if (response.ok) {
-          setGame(null);
-          setSaving(false);
-          setSuccess(true);
-          setTimeout(() => setSuccess(false), 2500);
-        }
-      },
-    );
+    const result = await putGame(game, category, comment);
+
+    if (result === 'success') {
+      setGame(null);
+      setSaving(false);
+      setSuccess(true);
+      setTimeout(() => setSuccess(false), 2500);
+      LoadGames.clearAll();
+    }
+
+    if (result === 'failure') {
+      setSaving(false);
+    }
   }
 
   return (
@@ -96,24 +74,27 @@ export function AdminEdit(props: Props) {
           className="form-control"
           value={game ? game.id : '-'}
           onChange={e =>
-            stageGame(games.find(g => g.id === e.target.value) || null)
+            stageGame(
+              games ? games.find(g => g.id === e.target.value) || null : null,
+            )
           }
         >
-          {isLoading && (
+          {!games && (
             <option disabled value="-">
               Loading...
             </option>
           )}
-          {!isLoading && games.length && (
+          {games && games.length && (
             <option disabled value="-">
               Select a game
             </option>
           )}
-          {games.map(game => (
-            <option key={game.id} value={game.id}>
-              {game.name}
-            </option>
-          ))}
+          {games &&
+            games.map(game => (
+              <option key={game.id} value={game.id}>
+                {game.name}
+              </option>
+            ))}
         </select>
         <div className="mt-2 mb-3">
           <button className="btn btn-light btn-sm" onClick={reload}>
@@ -124,7 +105,7 @@ export function AdminEdit(props: Props) {
           {game && (
             <div>
               <div className="game-preview-container">
-                <Game
+                <GameComponent
                   game={{
                     comment,
                     name,
