@@ -1,0 +1,6 @@
+{
+  "version": 2,
+  "env": {
+    "GB_TOKEN": "@gb-token"
+  }
+}

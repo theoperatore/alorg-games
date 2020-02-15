@@ -1,24 +1,24 @@
 import * as React from 'react';
+import { useFirebase } from './getDb';
 
-type User = {
-  isLoggedIn: boolean;
-  isLoading: boolean;
-};
+type User = 'pending' | 'success' | 'failed';
 
-export function useUser() {
-  const [user, setUser] = React.useState<User>({
-    isLoggedIn: false,
-    isLoading: true,
-  });
+export function useUser(): User {
+  const firebase = useFirebase();
+  const [user, setUser] = React.useState<User>('pending');
+
   React.useEffect(() => {
-    setUser(u => ({ ...u, isLoading: true }));
-    fetch('/api/user').then(response => {
-      if (response.status === 200) {
-        setUser({ isLoggedIn: true, isLoading: false });
+    const off = firebase.auth().onAuthStateChanged(maybeUser => {
+      if (maybeUser) {
+        setUser('success');
       } else {
-        setUser({ isLoggedIn: false, isLoading: false });
+        setUser('failed');
       }
     });
+
+    return () => {
+      off();
+    };
   }, []);
 
   return user;

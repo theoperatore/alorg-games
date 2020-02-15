@@ -1,11 +1,19 @@
-export async function getDb() {
-  const config = await import('../secrets.json');
-  const firebase = await import('firebase/app');
-  await import('@firebase/firestore');
-  await import('@firebase/auth');
+import firebase from 'firebase/app';
+import '@firebase/firestore';
+import '@firebase/auth';
+import { creds } from './clientCredentials';
+
+export async function getDb(): Promise<
+  [firebase.firestore.Firestore, firebase.auth.Auth]
+> {
+  // uncomment if you only want this to execute on the server.
+  // const firebase = await import('firebase/app');
+  // await import('@firebase/firestore');
+  // await import('@firebase/auth');
+  // const creds = await import('./clientCredentials');
 
   try {
-    firebase.initializeApp(config.firebase);
+    firebase.initializeApp(creds);
   } catch (err) {
     // we skip the "already exists" message which is
     // not an actual error when we're hot-reloading
@@ -14,17 +22,12 @@ export async function getDb() {
     }
   }
 
-  return firebase.firestore();
+  return [firebase.firestore(), firebase.auth()];
 }
 
-export async function getAuth() {
-  const config = await import('../secrets.json');
-  const firebase = await import('firebase/app');
-  await import('@firebase/firestore');
-  await import('@firebase/auth');
-
+export function useFirebase() {
   try {
-    firebase.initializeApp(config.firebase);
+    firebase.initializeApp(creds);
   } catch (err) {
     // we skip the "already exists" message which is
     // not an actual error when we're hot-reloading
@@ -33,5 +36,5 @@ export async function getAuth() {
     }
   }
 
-  return firebase.auth();
+  return firebase;
 }
