@@ -3,16 +3,16 @@ import { GameSearch } from '../GameSearch/ index';
 import { Game } from '../Game';
 import { GiantBombSearchResult } from '../../lib/giantbomb';
 import { Alert } from '../Alert';
+import { useGamesPost, GameToSave } from '../../lib/useGamesPost';
 
-type Props = {};
-
-export function AdminAdd(props: Props) {
+export function AdminAdd() {
   const [isSaving, setSaving] = React.useState(false);
   const [showSuccess, setSuccess] = React.useState(false);
   const [game, setGame] = React.useState<null | GiantBombSearchResult>(null);
   const [selectedPlatform, setPlatform] = React.useState('');
   const [category, setCategory] = React.useState('inprogress');
   const [comment, setComment] = React.useState('');
+  const postGame = useGamesPost();
 
   function reset() {
     setGame(null);
@@ -31,34 +31,28 @@ export function AdminAdd(props: Props) {
   function handleAdd() {
     if (!game || !selectedPlatform) return;
 
-    const payload = {
-      game: {
-        name: game.name,
-        platform: selectedPlatform,
-        gbid: game.id,
-        image:
-          game.image.original_url ||
-          game.image.screen_large_url ||
-          game.image.screen_url ||
-          game.image.super_url ||
-          game.image.medium_url ||
-          game.image.small_url ||
-          game.image.thumb_url ||
-          game.image.tiny_url ||
-          null,
-        comment,
-        category,
-      },
+    const gameToSave: GameToSave = {
+      name: game.name,
+      platform: selectedPlatform,
+      gbid: game.id,
+      image:
+        game.image.original_url ||
+        game.image.screen_large_url ||
+        game.image.screen_url ||
+        game.image.super_url ||
+        game.image.medium_url ||
+        game.image.small_url ||
+        game.image.thumb_url ||
+        game.image.tiny_url ||
+        '',
+      comment,
       category,
     };
 
     setSaving(true);
-    fetch('/api/games', {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    }).then(response => {
+    postGame(gameToSave).then(response => {
       setSaving(false);
-      if (response.status === 200) {
+      if (response === 'success') {
         reset();
         setSuccess(true);
         setTimeout(() => setSuccess(false), 2500);
@@ -83,7 +77,7 @@ export function AdminAdd(props: Props) {
                   image: game.image.original_url,
                   comment,
                   id: 'demo',
-                  gbid: `${game.id}`,
+                  gbid: game.id,
                   name: game.name,
                   platform: selectedPlatform,
                 }}

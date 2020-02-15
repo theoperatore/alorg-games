@@ -9,7 +9,7 @@ export type Game = {
   platform: string;
   comment?: string;
   category: string;
-  gbid: string;
+  gbid: number;
   image: string;
 };
 

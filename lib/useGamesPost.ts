@@ -2,21 +2,17 @@ import { Game } from './useGamesList';
 import { useFirebase } from './getDb';
 import { LoadGames } from './useGames';
 
-type Status = 'success' | 'failure';
+export type Status = 'success' | 'failure';
+export type GameToSave = Omit<Game, 'id'>;
 
-export function useGamePut() {
+export function useGamesPost() {
   const firebase = useFirebase();
 
-  return async (
-    game: Game,
-    category: string,
-    comment?: string,
-  ): Promise<Status> => {
+  return async (game: GameToSave): Promise<Status> => {
     const timestamp = firebase.firestore.Timestamp.now();
-    const id = game.id;
     const payload = {
-      category,
-      comment,
+      ...game,
+      date_added: timestamp,
       date_modified: timestamp,
     };
 
@@ -24,8 +20,7 @@ export function useGamePut() {
       await firebase
         .firestore()
         .collection('games')
-        .doc(id)
-        .update(payload);
+        .add(payload);
 
       LoadGames.clearAll();
       return 'success';

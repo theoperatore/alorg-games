@@ -8,7 +8,7 @@ export type GameType = {
   platform: string;
   comment?: string;
   image: string;
-  gbid: string;
+  gbid: number;
 };
 
 export type GamesList = {

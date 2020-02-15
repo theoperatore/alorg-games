@@ -3,17 +3,6 @@ import { Game as GameComponent } from '../Game';
 import { Alert } from '../Alert';
 import { useGamesList, Game } from '../../lib/useGamesList';
 import { useGamePut } from '../../lib/useGamePut';
-import { LoadGames } from '../../lib/useGames';
-
-type EditGame = {
-  id: string;
-  name: string;
-  platform: string;
-  comment?: string;
-  category: string;
-  gbid: string;
-  image: string;
-};
 
 export function AdminEdit() {
   const [cache, setCache] = React.useState(1);
@@ -53,7 +42,6 @@ export function AdminEdit() {
       setSaving(false);
       setSuccess(true);
       setTimeout(() => setSuccess(false), 2500);
-      LoadGames.clearAll();
     }
 
     if (result === 'failure') {
