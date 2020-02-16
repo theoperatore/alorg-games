@@ -1,8 +1,10 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { GameType } from '../../lib/useGames';
+import { GiantBombGame } from '../../lib/giantbomb';
 
 const Container = styled.div<{ image: string }>`
+  position: relative;
   height: 450px;
   width: 100%;
   border-radius: 12px;
@@ -31,11 +33,43 @@ const Name = styled.h2`
   margin: 0;
 `;
 
+const DetailsIcon = styled.span`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  font-family: monospace;
+  font-size: 1.5em;
+  cursor: pointer;
+`;
+
 type Props = {
   game: GameType;
 };
 
 export function Game({ game }: Props) {
+  const [details, setDetails] = React.useState<GiantBombGame | null>(null);
+  const [loadDetails, setLoadDetails] = React.useState(false);
+  React.useEffect(() => {
+    if (loadDetails) {
+      fetch(`/api/details?id=${game.gbid}`)
+        .then(r => r.json())
+        .then(response => {
+          setDetails(response);
+        });
+    }
+  }, [loadDetails, game.gbid]);
+
+  React.useEffect(() => {
+    if (details) {
+      alert(details.deck);
+    }
+  }, [details]);
+
   return (
     <Container image={game.image}>
       <div>
@@ -45,6 +79,7 @@ export function Game({ game }: Props) {
         </div>
         <p>{game.comment}</p>
       </div>
+      <DetailsIcon onClick={() => setLoadDetails(true)}>(i)</DetailsIcon>
     </Container>
   );
 }
