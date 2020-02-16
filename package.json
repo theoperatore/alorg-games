@@ -6,6 +6,9 @@
   "author": "Al Petersen <theoperatore@gmail.com>",
   "license": "MIT",
   "private": true,
+  "engines": {
+    "node": "12.x"
+  },
   "scripts": {
     "dev": "next",
     "build": "next build",
