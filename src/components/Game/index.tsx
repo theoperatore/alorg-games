@@ -79,7 +79,17 @@ export function Game({ game }: Props) {
         </div>
         <p>{game.comment}</p>
       </div>
-      <DetailsIcon onClick={() => setLoadDetails(true)}>(i)</DetailsIcon>
+      <DetailsIcon
+        onClick={() => {
+          if (!details) {
+            setLoadDetails(true);
+          } else {
+            alert(details.deck);
+          }
+        }}
+      >
+        (i)
+      </DetailsIcon>
     </Container>
   );
 }
