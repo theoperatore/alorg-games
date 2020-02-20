@@ -55,12 +55,8 @@ export default function Why() {
             </a>
           </li>
           <li>
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://www.digitalocean.com/"
-            >
-              Digital Ocean for DNS & hosting
+            <a target="_blank" rel="noopener noreferrer" href="https://zeit.co">
+              Zeit Now for hosting
             </a>
           </li>
           <li>

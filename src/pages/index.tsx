@@ -16,7 +16,12 @@ const Index = () => {
     <>
       <AppHead title="Games" />
       <PageLayout>
-        <h1>In progress</h1>
+        <h1>
+          In progress
+          <Link href="/admin">
+            <a className="admin-link">Admin</a>
+          </Link>
+        </h1>
         <small>Little by little.</small>
         <div className="game-container">
           {inprogress.map(game => (
@@ -55,7 +60,7 @@ const Index = () => {
           ))}
         </div>
         <footer>
-          @2019{' '}
+          @2020{' '}
           <Link href="/why">
             <a>wat dis?</a>
           </Link>{' '}
