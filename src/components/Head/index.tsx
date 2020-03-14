@@ -27,7 +27,7 @@ export function AppHead(props: Props) {
         content="A place to put games I've played, playing, or have stop playing"
       />
 
-      <link rel="manifest" href="/manifest.json?id=1" />
+      <link rel="manifest" href="/manifest.json?id=2" />
       <link rel="icon" type="image/png" href="/cd.png" />
       <link rel="apple-touch-icon" href="/cd.png"></link>
       <title>{props.title}</title>
