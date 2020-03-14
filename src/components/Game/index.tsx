@@ -3,56 +3,62 @@ import styled from 'styled-components';
 import { GiantBombGame } from '../../lib/giantbomb';
 import { GameType } from '../../lib/ssr/LoadGamesSSR';
 
-const Container = styled.div<{ image: string }>`
+const Container = styled.div`
   position: relative;
   height: 450px;
   width: 100%;
   border-radius: 12px;
   color: #fff;
-
-  padding: 12px;
-  display: flex;
-  align-items: flex-end;
+  overflow: hidden;
 
   background-color: #333;
-  background-image: url(${props => props.image});
-  background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.9)),
-    url(${props => props.image});
+`;
+
+const Image = styled.img`
+  color: #333;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 450px;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+`;
+
+const Overlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.9));
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
 `;
 
+const Content = styled.div`
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 12px;
+  cursor: pointer;
+`;
+
 const Platform = styled.small`
   color: #d9d9d9;
-  padding: 0;
-  margin: 0;
 `;
 
 const Name = styled.h2`
-  padding: 0;
-  margin: 0;
-`;
-
-const DetailsIcon = styled.span`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px;
-  position: absolute;
-  top: 0;
-  right: 0;
-
-  font-family: monospace;
-  font-size: 1.5em;
-  cursor: pointer;
+  padding-bottom: 12px;
 `;
 
 type Props = {
   game: GameType;
+  lazy?: boolean;
 };
 
-export function Game({ game }: Props) {
+export function Game({ game, lazy }: Props) {
   const [details, setDetails] = React.useState<GiantBombGame | null>(null);
   const [loadDetails, setLoadDetails] = React.useState(false);
   React.useEffect(() => {
@@ -71,26 +77,32 @@ export function Game({ game }: Props) {
     }
   }, [details]);
 
+  function handleDetails() {
+    if (!details) {
+      setLoadDetails(true);
+    } else {
+      alert(details.deck);
+    }
+  }
+
   return (
-    <Container image={game.image}>
-      <div>
-        <div>
-          <Platform>{game.platform}</Platform>
-          <Name>{game.name}</Name>
-        </div>
+    <Container>
+      <Image
+        className={lazy ? 'lazy' : undefined}
+        src={lazy ? '' : game.image}
+        data-src={game.image}
+        alt={`${game.name} cover art`}
+        title={game.name}
+        height={450}
+        width="auto"
+        loading={lazy ? 'lazy' : undefined}
+      />
+      <Overlay />
+      <Content onClick={handleDetails}>
+        <Platform>{game.platform}</Platform>
+        <Name>{game.name}</Name>
         <p>{game.comment}</p>
-      </div>
-      <DetailsIcon
-        onClick={() => {
-          if (!details) {
-            setLoadDetails(true);
-          } else {
-            alert(details.deck);
-          }
-        }}
-      >
-        (i)
-      </DetailsIcon>
+      </Content>
     </Container>
   );
 }

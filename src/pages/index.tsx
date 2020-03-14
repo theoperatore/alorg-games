@@ -47,6 +47,35 @@ const Index = (props: Props) => {
     initialData: props.games,
   });
 
+  React.useEffect(() => {
+    if ('IntersectionObserver' in window) {
+      let lazyImageObserver = new IntersectionObserver(
+        entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const lazyImage = entry.target as HTMLImageElement;
+              const imgSrc = lazyImage.dataset.src;
+              if (imgSrc) {
+                lazyImage.src = imgSrc;
+              }
+
+              lazyImage.classList.remove('lazy');
+              lazyImageObserver.unobserve(lazyImage);
+            }
+          });
+        },
+        {
+          rootMargin: '0px 0px 100px 0px',
+        },
+      );
+
+      const lazyImages = document.querySelectorAll('img.lazy');
+      lazyImages.forEach(function(lazyImage) {
+        lazyImageObserver.observe(lazyImage);
+      });
+    }
+  }, []);
+
   // since we're providing initialData from the SSR data,
   // "data" should never be undefined even if there is background
   // fetching and syncing happening. Therefore the `!` after `data`
@@ -76,7 +105,7 @@ const Index = (props: Props) => {
         <GamesContainer>
           {ondeck.map(game => (
             <Container key={game.id}>
-              <Game game={game} />
+              <Game game={game} lazy />
             </Container>
           ))}
         </GamesContainer>
@@ -85,7 +114,7 @@ const Index = (props: Props) => {
         <GamesContainer>
           {beaten.map(game => (
             <Container key={game.id}>
-              <Game game={game} />
+              <Game game={game} lazy />
             </Container>
           ))}
         </GamesContainer>
@@ -96,7 +125,7 @@ const Index = (props: Props) => {
         <GamesContainer>
           {setaside.map(game => (
             <Container key={game.id}>
-              <Game game={game} />
+              <Game game={game} lazy />
             </Container>
           ))}
         </GamesContainer>
