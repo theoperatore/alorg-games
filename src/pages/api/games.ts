@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextApiResponse } from 'next';
 import { LoadGamesSSR } from '../../lib/ssr/LoadGamesSSR';
 
 // used for both refreshing the client but also to refresh a client
