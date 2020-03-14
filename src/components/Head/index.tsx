@@ -29,6 +29,8 @@ export function AppHead(props: Props) {
 
       <link rel="manifest" href="/manifest.json?id=2" />
       <link rel="icon" type="image/png" href="/cd.png" />
+
+      {/* Generated via: https://appsco.pe/developer/splash-screens */}
       <link rel="apple-touch-icon" href="/cd.png"></link>
       <link
         href="splashscreens/iphone5_splash.png"
