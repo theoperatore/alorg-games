@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { GameType } from '../../lib/useGames';
 import { GiantBombGame } from '../../lib/giantbomb';
+import { GameType } from '../../lib/ssr/LoadGamesSSR';
 
 const Container = styled.div<{ image: string }>`
   position: relative;
@@ -14,6 +14,7 @@ const Container = styled.div<{ image: string }>`
   display: flex;
   align-items: flex-end;
 
+  background-color: #333;
   background-image: url(${props => props.image});
   background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.9)),
     url(${props => props.image});
