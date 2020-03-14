@@ -65,7 +65,7 @@ const Index = (props: Props) => {
           });
         },
         {
-          rootMargin: '0px 0px 100px 0px',
+          rootMargin: '0px 0px 256px 0px',
         },
       );
 
