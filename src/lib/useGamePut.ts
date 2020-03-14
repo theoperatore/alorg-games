@@ -1,6 +1,5 @@
 import { Game } from './useGamesList';
 import { useFirebase } from './getDb';
-import { LoadGames } from './useGames';
 
 type Status = 'success' | 'failure';
 
@@ -27,7 +26,6 @@ export function useGamePut() {
         .doc(id)
         .update(payload);
 
-      LoadGames.clearAll();
       return 'success';
     } catch (error) {
       console.log(error);

@@ -3,7 +3,8 @@ export const creds = {
   authDomain: 'gametips-94f49.firebaseapp.com',
   databaseURL: 'https://gametips-94f49.firebaseio.com',
   projectId: 'gametips-94f49',
-  storageBucket: '',
+  storageBucket: 'gametips-94f49.appspot.com',
   messagingSenderId: '667274304807',
   appId: '1:667274304807:web:ca96679786b2879eea1d02',
+  locationId: 'us-central',
 };

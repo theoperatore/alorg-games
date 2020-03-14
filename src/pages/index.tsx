@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { AppHead } from '../components/Head';
 import styled from 'styled-components';
 import Link from 'next/link';
+import useSWR from 'swr';
+import unfetch from 'isomorphic-unfetch';
+import { AppHead } from '../components/Head';
 import { Game } from '../components/Game';
 import { PageLayout } from '../components/PageLayout';
-import { useGames } from '../lib/useGames';
-import { LoadingTitle, LoadingSubtitle } from '../components/LoadingTitle';
-import { LoadingGame } from '../components/LoadingGame';
+import { GamesList } from '../lib/ssr/LoadGamesSSR';
 
 const Container = styled.div`
   width: 375px;
@@ -32,59 +32,27 @@ const AdminLink = styled.a`
   color: white;
 `;
 
-const Index = () => {
-  const games = useGames();
+async function fetchGames() {
+  const response = await unfetch('/api/games');
+  const data = await response.json();
+  return data.games as GamesList;
+}
 
-  if (!games) {
-    return (
-      <>
-        <AppHead title="Games" />
-        <PageLayout>
-          <LoadingTitle />
-          <LoadingSubtitle />
-          <GamesContainer>
-            <Container>
-              <LoadingGame />
-            </Container>
-            <Container>
-              <LoadingGame />
-            </Container>
-            <Container>
-              <LoadingGame />
-            </Container>
-          </GamesContainer>
-          <LoadingTitle />
-          <LoadingSubtitle />
-          <GamesContainer>
-            <Container>
-              <LoadingGame />
-            </Container>
-            <Container>
-              <LoadingGame />
-            </Container>
-            <Container>
-              <LoadingGame />
-            </Container>
-          </GamesContainer>
-          <LoadingTitle />
-          <LoadingSubtitle />
-          <GamesContainer>
-            <Container>
-              <LoadingGame />
-            </Container>
-            <Container>
-              <LoadingGame />
-            </Container>
-            <Container>
-              <LoadingGame />
-            </Container>
-          </GamesContainer>
-        </PageLayout>
-      </>
-    );
-  }
+type Props = {
+  games: GamesList;
+};
 
-  const { inprogress, beaten, ondeck, setaside } = games;
+const Index = (props: Props) => {
+  const { data } = useSWR('/api/games', fetchGames, {
+    initialData: props.games,
+  });
+
+  // since we're providing initialData from the SSR data,
+  // "data" should never be undefined even if there is background
+  // fetching and syncing happening. Therefore the `!` after `data`
+  // should be safe!
+  const { inprogress, beaten, ondeck, setaside } = data!;
+
   return (
     <>
       <AppHead title="Games" />
@@ -144,6 +112,12 @@ const Index = () => {
       </PageLayout>
     </>
   );
+};
+
+Index.getInitialProps = async () => {
+  const { LoadGamesSSR } = await import('../lib/ssr/LoadGamesSSR');
+  const games = await LoadGamesSSR.load(0);
+  return { games };
 };
 
 export default Index;

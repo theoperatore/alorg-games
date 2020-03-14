@@ -1,6 +1,5 @@
-import * as React from 'react';
 import Dataloader from 'dataloader';
-import { getDb } from './getDb';
+import { useSSRDb } from './useSSRDb';
 
 export type GameType = {
   id: string;
@@ -18,9 +17,9 @@ export type GamesList = {
   setaside: GameType[];
 };
 
-export const LoadGames = new Dataloader<any, GamesList>(
+export const LoadGamesSSR = new Dataloader<any, GamesList>(
   async () => {
-    const [db] = await getDb();
+    const [db] = await useSSRDb();
     const [
       inprogressRef,
       ondeckRef,
@@ -94,23 +93,3 @@ export const LoadGames = new Dataloader<any, GamesList>(
     batch: false,
   },
 );
-
-export function useGames() {
-  const [games, setGames] = React.useState<GamesList | null>(null);
-
-  React.useEffect(() => {
-    let isActive = true;
-
-    LoadGames.load(0).then(list => {
-      if (isActive) {
-        setGames(list);
-      }
-    });
-
-    return () => {
-      isActive = false;
-    };
-  }, []);
-
-  return games;
-}
