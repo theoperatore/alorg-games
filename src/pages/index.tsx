@@ -7,12 +7,13 @@ import { AppHead } from '../components/Head';
 import { Game } from '../components/Game';
 import { PageLayout } from '../components/PageLayout';
 import { GamesList } from '../lib/ssr/LoadGamesSSR';
+import { ScrollTopButton } from '../components/ScrollTopButton';
 
 const Container = styled.div`
   width: 375px;
   min-width: 375px;
   margin-right: 8px;
-  margin-bottom: 8px;
+  margin-bottom: 18px;
 
   @media (max-width: 400px) {
     width: 100%;
@@ -138,6 +139,7 @@ const Index = (props: Props) => {
             <AdminLink>Admin</AdminLink>
           </Link>
         </footer>
+        <ScrollTopButton />
       </PageLayout>
     </>
   );
