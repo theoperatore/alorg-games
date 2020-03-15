@@ -1,5 +1,6 @@
 import { Game } from './useGamesList';
 import { useFirebase } from './getDb';
+import { mutate } from 'swr';
 
 export type Status = 'success' | 'failure';
 export type GameToSave = Omit<Game, 'id'>;
@@ -21,6 +22,7 @@ export function useGamesPost() {
         .collection('games')
         .add(payload);
 
+      mutate('/api/games');
       return 'success';
     } catch (error) {
       console.log(error);

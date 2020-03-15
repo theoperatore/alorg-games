@@ -1,5 +1,6 @@
 import { Game } from './useGamesList';
 import { useFirebase } from './getDb';
+import { mutate } from 'swr';
 
 type Status = 'success' | 'failure';
 
@@ -26,6 +27,7 @@ export function useGamePut() {
         .doc(id)
         .update(payload);
 
+      mutate('/api/games');
       return 'success';
     } catch (error) {
       console.log(error);
