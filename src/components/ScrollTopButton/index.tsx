@@ -29,6 +29,7 @@ export function ScrollTopButton() {
     y: 0,
     onFrame: (props: any) => window.scroll(0, props.y),
   }));
+
   const [props, set] = useSpring(() => ({
     transform: 'scale(0) rotate(180deg)',
     config: config.stiff,
